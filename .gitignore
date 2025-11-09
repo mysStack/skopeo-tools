@@ -8,3 +8,6 @@ result
 
 # Ignore the bin directory
 bin
+web/node_modules/
+.vscode/
+.DS_Store
