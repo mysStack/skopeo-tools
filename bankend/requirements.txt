@@ -1,0 +1,9 @@
+# Web框架
+fastapi==0.103.1
+uvicorn==0.23.2
+python-multipart==0.0.6
+
+# 日志和工具
+pydantic==2.4.2
+pydantic-settings==2.0.3
+aiofiles==23.2.1

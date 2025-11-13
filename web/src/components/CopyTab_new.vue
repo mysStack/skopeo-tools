@@ -7,17 +7,25 @@
 
       <el-form :model="copyForm" label-width="120px">
         <el-form-item label="源镜像">
-          <el-input 
-            v-model="copyForm.sourceImage" 
+          <el-input
+            v-model="copyForm.sourceImage"
             placeholder="例如: docker://registry.example.com/source-image:tag"
+            :class="{ 'is-error': copyForm.sourceImage && !validateImageAddress(copyForm.sourceImage) }"
           />
+          <div v-if="copyForm.sourceImage && !validateImageAddress(copyForm.sourceImage)" class="error-message">
+            {{ getFormatErrorMessage('image') }}
+          </div>
         </el-form-item>
 
         <el-form-item label="目标镜像">
-          <el-input 
-            v-model="copyForm.destinationImage" 
+          <el-input
+            v-model="copyForm.destinationImage"
             placeholder="例如: docker://registry.example.com/dest-image:tag"
+            :class="{ 'is-error': copyForm.destinationImage && !validateImageAddress(copyForm.destinationImage) }"
           />
+          <div v-if="copyForm.destinationImage && !validateImageAddress(copyForm.destinationImage)" class="error-message">
+            {{ getFormatErrorMessage('image') }}
+          </div>
         </el-form-item>
 
         <el-form-item label="选项">
@@ -31,7 +39,11 @@
             placeholder="用户名:密码 (例如: username:password)"
             type="password"
             show-password
+            :class="{ 'is-error': copyForm.srcCreds && !validateAuthInfo(copyForm.srcCreds) }"
           />
+          <div v-if="copyForm.srcCreds && !validateAuthInfo(copyForm.srcCreds)" class="error-message">
+            {{ getFormatErrorMessage('auth') }}
+          </div>
         </el-form-item>
 
         <el-form-item label="目标认证信息">
@@ -40,7 +52,11 @@
             placeholder="用户名:密码 (例如: username:password)"
             type="password"
             show-password
+            :class="{ 'is-error': copyForm.destCreds && !validateAuthInfo(copyForm.destCreds) }"
           />
+          <div v-if="copyForm.destCreds && !validateAuthInfo(copyForm.destCreds)" class="error-message">
+            {{ getFormatErrorMessage('auth') }}
+          </div>
         </el-form-item>
 
         <el-form-item label="多架构处理">
@@ -65,7 +81,7 @@
         <span>复制结果</span>
       </template>
 
-      <el-alert 
+      <el-alert
         :title="result.success ? '复制成功' : '复制失败'"
         :type="result.success ? 'success' : 'error'"
         :description="result.message"
@@ -107,23 +123,23 @@ const copyImage = async () => {
     ElMessage.warning('请输入源镜像和目标镜像')
     return
   }
-  
+
   if (!validateImageAddress(copyForm.sourceImage)) {
     ElMessage.error(getFormatErrorMessage('image'))
     return
   }
-  
+
   if (!validateImageAddress(copyForm.destinationImage)) {
     ElMessage.error(getFormatErrorMessage('image'))
     return
   }
-  
+
   // 验证认证信息格式（如果提供了）
   if (copyForm.srcCreds && !validateAuthInfo(copyForm.srcCreds)) {
     ElMessage.error(getFormatErrorMessage('auth'))
     return
   }
-  
+
   if (copyForm.destCreds && !validateAuthInfo(copyForm.destCreds)) {
     ElMessage.error(getFormatErrorMessage('auth'))
     return
@@ -138,16 +154,10 @@ const copyImage = async () => {
       all: copyForm.all
     }
 
-    // 确保多架构选项被正确传递
-    if (copyForm.multiArch && copyForm.multiArch !== 'system') {
+    if (copyForm.multiArch !== 'system') {
       options.multiArch = copyForm.multiArch
-      console.log(`已添加多架构选项: ${copyForm.multiArch}`)
-    } else {
-      console.log("使用默认多架构处理 (system)")
     }
 
-    console.log("copyForm 对象:", JSON.stringify(copyForm, null, 2))
-    console.log("options 对象:", JSON.stringify(options, null, 2))
     await skopeoApi.copyImage(copyForm.sourceImage, copyForm.destinationImage, options, copyForm.srcCreds, copyForm.destCreds)
     result.value = {
       success: true,

@@ -1,0 +1,30 @@
+nohup: ignoring input
+
+> skopeo-web-ui@0.1.0 dev
+> vite
+
+
+  VITE v4.5.14  ready in 299 ms
+
+  ➜  Local:   http://localhost:3000/
+  ➜  Network: use --host to expose
+Invalid end tag.
+3:06:57 AM [vite] Internal server error: Invalid end tag.
+  Plugin: vite:vue
+  File: /workspaces/skopeo-tools/web/src/components/ListTabNew.vue:630:1
+  628|    }
+  629|  }
+  630|  </script>
+     |   ^
+  631|  
+  632|  <style scoped>
+      at createCompilerError (/workspaces/skopeo-tools/web/node_modules/@vue/compiler-core/dist/compiler-core.cjs.js:1364:17)
+      at emitError (/workspaces/skopeo-tools/web/node_modules/@vue/compiler-core/dist/compiler-core.cjs.js:2991:5)
+      at Object.onclosetag (/workspaces/skopeo-tools/web/node_modules/@vue/compiler-core/dist/compiler-core.cjs.js:2360:9)
+      at Tokenizer.stateInClosingTagName (/workspaces/skopeo-tools/web/node_modules/@vue/compiler-core/dist/compiler-core.cjs.js:785:16)
+      at Tokenizer.parse (/workspaces/skopeo-tools/web/node_modules/@vue/compiler-core/dist/compiler-core.cjs.js:1143:16)
+      at Object.baseParse (/workspaces/skopeo-tools/web/node_modules/@vue/compiler-core/dist/compiler-core.cjs.js:3030:13)
+      at Object.parse (/workspaces/skopeo-tools/web/node_modules/@vue/compiler-dom/dist/compiler-dom.cjs.js:910:23)
+      at Object.parse$1 [as parse] (/workspaces/skopeo-tools/web/node_modules/@vue/compiler-sfc/dist/compiler-sfc.cjs.js:1801:24)
+      at createDescriptor (/workspaces/skopeo-tools/web/node_modules/@vitejs/plugin-vue/dist/index.cjs:86:43)
+      at transformMain (/workspaces/skopeo-tools/web/node_modules/@vitejs/plugin-vue/dist/index.cjs:2331:34)

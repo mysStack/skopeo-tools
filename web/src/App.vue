@@ -32,7 +32,7 @@ import { ref } from 'vue'
 import InspectTab from './components/InspectTab.vue'
 import CopyTab from './components/CopyTab.vue'
 import ListTab from './components/ListTab.vue'
-import SyncTab from './components/SyncTab.vue'
+import SyncTab from './components/SyncTabNew.vue'
 import DeleteTab from './components/DeleteTab.vue'
 
 const activeTab = ref('inspect')

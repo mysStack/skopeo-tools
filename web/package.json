@@ -3,12 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "concurrently \"npm run dev:vue\" \"npm run dev:server\"",
+    "dev": "vite",
     "dev:vue": "vite",
-    "dev:server": "node server.js",
+    "dev:server": "cd ../bankend && python app.py",
     "build": "vite build",
     "preview": "vite preview",
-    "start": "node server.js"
+    "start": "cd ../bankend && python app.py"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.1.0",
@@ -16,6 +16,7 @@
     "cors": "^2.8.5",
     "element-plus": "^2.3.8",
     "express": "^5.1.0",
+    "http-proxy-middleware": "^3.0.5",
     "vue": "^3.3.4",
     "vue-json-viewer": "^3.0.0"
   },

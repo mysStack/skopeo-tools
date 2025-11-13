@@ -208,6 +208,20 @@ Contributing
 
 Please read the [contribution guide](CONTRIBUTING.md) if you want to collaborate in the project.
 
+## 批量镜像同步工具
+
+本仓库包含用于批量同步Docker镜像的工具，支持Shell脚本和Python两种实现方式：
+
+### Shell脚本版本
+
+`sync_images.sh` 脚本使用skopeo命令将镜像从一个仓库复制到另一个仓库。
+
+### Python版本
+
+在 `bankend` 目录中提供了Python实现的镜像同步工具，包含核心功能和RESTful API接口，具有更丰富的功能和更好的日志记录。
+
+详细使用方法请参考 [bankend/README.md](./bankend/README.md)。
+
 ## Commands
 | Command                                            | Description                                                                                  |
 | -------------------------------------------------- | ---------------------------------------------------------------------------------------------|

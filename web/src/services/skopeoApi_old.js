@@ -22,20 +22,10 @@ export default {
   // 镜像检查
   async inspectImage(imageName, options = {}) {
     try {
-      // 添加调试日志
-      console.log('API调用 - 镜像名称:', imageName)
-      console.log('API调用 - 选项:', JSON.stringify(options))
-
-      const requestData = {
+      const response = await api.post('/inspect', { 
         imageName,
-        ...options,
-        // 确保raw和config属性在顶层
-        ...(options.raw !== undefined ? { raw: options.raw } : {}),
-        ...(options.config !== undefined ? { config: options.config } : {})
-      }
-      console.log('API调用 - 完整请求数据:', JSON.stringify(requestData))
-
-      const response = await api.post('/inspect', requestData)
+        ...options 
+      })
       return response.data
     } catch (error) {
       throw new Error(`检查镜像失败: ${error.message}`)
@@ -43,30 +33,13 @@ export default {
   },
 
   // 镜像复制
-  async copyImage(sourceImage, destinationImage, options = {}, srcCreds = null, destCreds = null) {
+  async copyImage(sourceImage, destinationImage, options = {}) {
     try {
-      const requestData = {
+      const response = await api.post('/copy', {
         sourceImage,
         destinationImage,
         ...options
-      }
-      
-      // 确保多架构选项被正确传递
-      if (options.multiArch) {
-        requestData.multiArch = options.multiArch
-        console.log("已添加多架构选项到请求:", options.multiArch)
-      }
-      console.log("发送请求:", JSON.stringify(requestData, null, 2))
-      
-      // 添加认证信息
-      if (srcCreds) {
-        requestData.srcCreds = srcCreds
-      }
-      if (destCreds) {
-        requestData.destCreds = destCreds
-      }
-      
-      const response = await api.post('/copy', requestData)
+      })
       return response.data
     } catch (error) {
       throw new Error(`复制镜像失败: ${error.message}`)
@@ -101,7 +74,7 @@ export default {
             return response.data
           }
         }
-
+        
         return response.data
       }
     } catch (error) {
@@ -109,7 +82,7 @@ export default {
       throw new Error(`列出标签失败: ${error.message}`)
     }
   },
-
+  
   // 获取标签数量
   async getTagCount(repository) {
     try {
@@ -124,46 +97,16 @@ export default {
   },
 
   // 同步镜像
-  async syncImages(images, destinationRegistry, options = {}) {
+  async syncImages(source, destination, options = {}) {
     try {
       const response = await api.post('/sync', {
-        images,
-        destination_registry: destinationRegistry,
-        source_registry: options.sourceRegistry || "docker.io",
-        src_creds: options.srcCreds,
-        dest_creds: options.destCreds
+        source,
+        destination,
+        ...options
       })
       return response.data
     } catch (error) {
       throw new Error(`同步镜像失败: ${error.message}`)
-    }
-  },
-
-  // 从文件同步镜像
-  async syncImagesFromFile(file, destinationRegistry, options = {}) {
-    try {
-      const formData = new FormData()
-      formData.append('image_list', file)
-      formData.append('destination_registry', destinationRegistry)
-      
-      if (options.sourceRegistry) {
-        formData.append('source_registry', options.sourceRegistry)
-      }
-      if (options.srcCreds) {
-        formData.append('src_creds', options.srcCreds)
-      }
-      if (options.destCreds) {
-        formData.append('dest_creds', options.destCreds)
-      }
-
-      const response = await api.post('/sync/file', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      })
-      return response.data
-    } catch (error) {
-      throw new Error(`从文件同步镜像失败: ${error.message}`)
     }
   },
 
@@ -223,24 +166,14 @@ export default {
   // 代理 API - 获取数据块
   async proxyGetBlob(imageId, digest, size) {
     try {
-      const response = await api.post('/proxy/get-blob', {
-        imageId,
-        digest,
-        size
+      const response = await api.post('/proxy/get-blob', { 
+        imageId, 
+        digest, 
+        size 
       })
       return response.data
     } catch (error) {
       throw new Error(`获取数据块失败: ${error.message}`)
-    }
-  },
-  
-  // 获取日志文件
-  async getLogFile(filename) {
-    try {
-      const response = await api.get(`/logs/${filename}`)
-      return response.data
-    } catch (error) {
-      throw new Error(`获取日志文件失败: ${error.message}`)
     }
   }
 }
